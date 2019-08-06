@@ -1,16 +1,12 @@
 # plotthis
 
-<!-- badges: start -->
-<!-- badges: end -->
-
-The goal of plotthis is to ...
+The goal of 'plotthis' is to wrap up some frequently used ggplot functions
 
 ## Installation
 
-You can install the released version of plotthis from [CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("plotthis")
+Please install from github:
+```r
+devtools::install_github("liuyanguu/plotthis")
 ```
 
 ## Example
@@ -19,6 +15,10 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(plotthis)
-## basic example code
+
+scatter.plot.simple(data = datam1_terra, x = "col_water_cm", y = "Column_WV")
+
+scatter.plot.diagonal(data = datam1_terra, x = "col_water_cm", y = "Column_WV", add_abline = T)
+
 ```
 
