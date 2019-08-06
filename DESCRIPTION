@@ -1,0 +1,27 @@
+Package: plotthis
+Title: Wrapped functions using ggplot
+Version: 0.0.1
+Authors@R: c(
+    person(given = "Yang", family = "Liu", role = c("aut", "cre"), email = "lyhello@gmail.com",
+           comment = c(ORCID = "0000-0001-6557-6439"))
+    )
+Description: The aim of 'plotthis' is to aid in visual data investigations
+ using 'ggplot2'. It offers some wrapped functions for users' convenience. 
+License: MIT + file LICENSE
+URL: https://github.com/liuyanguu/plotthis
+BugReports: https://github.com/liuyanguu/plotthis/issues
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    R (>= 3.3.0)
+Imports:
+    ggplot2 (>= 3.0.0),
+    data.table (>= 1.12.0),
+    ggforce (>= 0.2.1.9000),
+    ggExtra (>= 0.8),
+    RColorBrewer (>= 1.1.2),
+Suggests:
+    gridExtra (>= 2.3),
+    here
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1.9000
