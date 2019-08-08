@@ -10,9 +10,21 @@ scatter.plot.simple(data, x, y, size0 = 0.1, alpha0 = 0.3,
 \arguments{
 \item{data}{dataset}
 
-\item{size0}{point size, default to 1 of nobs<1000, 0.4 if nobs>1000.}
+\item{x}{x}
+
+\item{y}{y}
+
+\item{size0}{point size, default to 1 of nobs<1000, 0.4 if nobs>1000}
+
+\item{alpha0}{alpha of point}
 
 \item{dilute}{a number or logical, dafault to TRUE, will plot \code{nrow(data_long)/dilute} data. For example, if dilute = 5 will plot 1/5 of the data.}
+
+\item{add_hist}{optional to add marginal histogram using \code{ggExtra::ggMarginal} but notice
+if add histogram, what is returned is no longer a ggplot2 object}
+}
+\value{
+ggplot2 object if \code{add_hist = FALSE}
 }
 \description{
 simple scatter plot, adding marginal histogram by default.

@@ -4,9 +4,15 @@
 #' @import ggplot2
 #'
 #' @param data dataset
+#' @param x x
+#' @param y y
+#' @param size0 point size, default to 1 of nobs<1000, 0.4 if nobs>1000
+#' @param alpha0 alpha of point
 #' @param dilute a number or logical, dafault to TRUE, will plot \code{nrow(data_long)/dilute} data. For example, if dilute = 5 will plot 1/5 of the data.
-#' @param size0 point size, default to 1 of nobs<1000, 0.4 if nobs>1000.
+#' @param add_hist optional to add marginal histogram using `ggExtra::ggMarginal` but notice
+#' if add histogram, what is returned is no longer a ggplot2 object
 #'
+#' @return ggplot2 object if `add_hist = FALSE`
 #' @examples
 #' scatter.plot.simple(data = datam1_terra, x = "col_water_cm", y = "Column_WV")
 #'
@@ -40,10 +46,20 @@ scatter.plot.simple <-  function(data, x, y, size0 = 0.1, alpha0 = 0.3,
 #' @importFrom ggpubr stat_cor
 #' @import data.table
 #' @importFrom BBmisc capitalizeStrings
-#' @export scatter.plot.diagonal
+#'
+#' @param data dataset
+#' @param x x
+#' @param y y
+#' @param dilute a number or logical, dafault to TRUE, will plot \code{nrow(data_long)/dilute} data. For example, if dilute = 5 will plot 1/5 of the data.
+#' @param add_abline default to FALSE, add a diagonal line
+#' @param add_hist optional to add marginal histogram using `ggExtra::ggMarginal` but notice
+#' if add histogram, what is returned is no longer a ggplot2 object
+#'
+#' @return ggplot2 object if `add_hist = FALSE`
 #' @examples
 #' scatter.plot.diagonal(data = datam1_terra, x = "col_water_cm", y = "Column_WV", add_abline = T)
 #'
+#' @export scatter.plot.diagonal
 #'
 scatter.plot.diagonal <- function(data, x, y, dilute = F, add_abline = F, add_hist = T){
   # with diagonal line and R2
@@ -73,7 +89,8 @@ scatter.plot.diagonal <- function(data, x, y, dilute = F, add_abline = F, add_hi
 
 # Maps --------------------------------------------------------------------
 
-# us map using ggmap
+#' us map using ggmap
+#' @param data0 data with lon and lat
 #' @import ggmap
 #' @export ggmap.plot.us
 #'
