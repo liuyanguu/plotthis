@@ -2,11 +2,11 @@
 % Please edit documentation in R/plotthis.R
 \name{ggmap.plot.us.size}
 \alias{ggmap.plot.us.size}
-\title{us map with fill = size0.}
+\title{The US map with fill = size0.}
 \usage{
 ggmap.plot.us.size(data0 = aeronetdt, size0 = "Ndays", sat0 = sat,
   NEMIA = F)
 }
 \description{
-us map with fill = size0.
+The US map with fill = size0.
 }

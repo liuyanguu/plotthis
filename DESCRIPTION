@@ -20,6 +20,12 @@ Imports:
     ggforce (>= 0.2.1.9000),
     ggExtra (>= 0.8),
     RColorBrewer (>= 1.1.2),
+    BBmisc,
+    Hmisc,
+    ggmap,
+    ggpubr,
+    sf,
+    xgboost
 Suggests:
     gridExtra (>= 2.3),
     here
