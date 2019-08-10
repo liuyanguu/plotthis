@@ -4,7 +4,7 @@
 \alias{rfe.fit}
 \title{A wrapped function to run xgboost model.}
 \usage{
-rfe.fit(X, Y, xgb_param, verbose = FALSE)
+rfe.fit(X, Y, xgb_param)
 }
 \arguments{
 \item{X}{predictors, Notice that \strong{should NOT contains Y}.}

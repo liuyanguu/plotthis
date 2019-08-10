@@ -5,7 +5,7 @@
 \title{core cv function what uses \code{xgboost.dart.cvtune} to run cv for one fold.}
 \usage{
 run.k.fold.cv(sat, k_fold, run_param_cv, dataXY_df, y_var, index_train,
-  index_test, ...)
+  index_test, xgb_threads, ...)
 }
 \arguments{
 \item{sat}{Name of the satellite, just for labelling purpose, for example "terra"}
@@ -23,6 +23,10 @@ code to allow parameter tuning during RFE process. May not be necessary.}
 \item{index_train}{index for training}
 
 \item{index_test}{index for testing}
+
+\item{xgb_threads}{xgb_threads passed from parent function}
+
+\item{...}{other arguments}
 }
 \description{
 internal function.

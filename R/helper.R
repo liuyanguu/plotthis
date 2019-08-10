@@ -1,26 +1,11 @@
-# Help func. --------------------------------------------------------------
-
-#'Greedily pack objects with sizes given by `object.sizes`
-#'into `n.bins` bins. Return a vector of the bin indices.
-#'by Kodi Arfer.
-#'@export helper.pack.bins
-helper.pack.bins = function(object.sizes, n.bins){
-
-  d = data.table(size = as.integer(object.sizes), bin = NA_integer_)
-  d[, oi := .I]
-  # Shuffle the input so ties on object size are broken randomly.
-  d = d[sample.int(nrow(d))]
-  bin.sizes = rep(0L, n.bins)
-  while (anyNA(d$bin))
-  {the.oi = d[is.na(bin)][which.max(size), oi]
-  bsi = which.min(bin.sizes)
-  d[oi == the.oi, bin := bsi]
-  bin.sizes[bsi] = bin.sizes[bsi] + d[oi == the.oi, size]}
-  d[order(oi), bin]
-}
+# Some help func. --------------------------------------------------------------
 
 #' dilute dataset.
 #'
+#' help function
+#'
+#' @param data0 dataset
+#' @param dilute_by default to 10, 1/10
 #' @export helper.dilute.data
 #'
 helper.dilute.data <- function(data0, dilute_by = 10){
@@ -29,7 +14,11 @@ helper.dilute.data <- function(data0, dilute_by = 10){
   return(data0)
 }
 
-#' split aodid to numeric lat lon
+#' split aodid to numeric lat lon.
+#'
+#' helper function
+#'
+#' @param data0 dataset
 #' @export helper.aodid.to.lon.lat
 #' @return dataset with 2 more columns
 helper.aodid.to.lon.lat <- function(data0){

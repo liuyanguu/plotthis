@@ -2,13 +2,16 @@
 % Please edit documentation in R/helper.R
 \name{helper.aodid.to.lon.lat}
 \alias{helper.aodid.to.lon.lat}
-\title{split aodid to numeric lat lon}
+\title{split aodid to numeric lat lon.}
 \usage{
 helper.aodid.to.lon.lat(data0)
+}
+\arguments{
+\item{data0}{dataset}
 }
 \value{
 dataset with 2 more columns
 }
 \description{
-split aodid to numeric lat lon
+helper function
 }

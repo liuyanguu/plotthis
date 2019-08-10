@@ -6,6 +6,11 @@
 \usage{
 helper.dilute.data(data0, dilute_by = 10)
 }
+\arguments{
+\item{data0}{dataset}
+
+\item{dilute_by}{default to 10, 1/10}
+}
 \description{
-dilute dataset.
+help function
 }

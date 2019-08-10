@@ -6,6 +6,8 @@
 #
 #
 
+
+
 # Version 3 CV with RFE -------------------------------------------------------------
 # 19.4, a better version that seperates the rfe process
 # 19.7, use random search by Kodi::xgboost.dart.cvtune
@@ -15,8 +17,11 @@
 #' Version 3 CV with RFE (recursive feature selection using SHAP),
 #' use random search by `xgboost.dart.cvtune`.
 #'
+#'
+#' @importFrom stats as.formula cor lm na.omit predict var
 #' @import xgboost
 #' @import data.table
+#'
 #'
 #' @param modeldt1 the dataset
 #' @param sat Name of the satellite, just for labelling purpose, for example "terra"
@@ -106,7 +111,9 @@ run.k.fold.cv.rfe.wrap <- function(
                               xgb_threads = xgb_threads)
   # write param list to global environment
   # so in rfe process there is no need to run param search
-  xgb_param_list_full <<- cv_results$xgb_param_list2
+  xgb_param_list_full <- cv_results$xgb_param_list2
+  e0 <- new.env()
+  assign("xgb_param_list_full", xgb_param_list_full, e0)
   cv_results_full_model <- cv_results
   modeldt1 <-  cbind(modeldt1, cv_results$y_pred_dt)
 
@@ -222,7 +229,8 @@ run.k.fold.cv <- function(sat, k_fold, run_param_cv, dataXY_df, y_var,
       shap_pred <- as.data.table(rsxgb0$pred.fun(dataXY_df[index_test[[i]],],
                                                  predcontrib = TRUE, approxcontrib = FALSE))
     } else {
-      # use param to fit the model (old way)
+      # use already obtained param to fit the model (old way)
+      xgb_param_list_full <- get("xgb_param_list_full", envir = e0)
       xgb_param_dart <- xgb_param_list_full[[paste0(by, i)]]
       train_mm <- as.matrix(data_X[index_train[[i]],])
       test_mm <- as.matrix(data_X[index_test[[i]],]) # features do not contain Y variable
@@ -257,11 +265,6 @@ run.k.fold.cv <- function(sat, k_fold, run_param_cv, dataXY_df, y_var,
               xgb_param_list2 = xgb_param_list2))
 }
 
-# examples
-# cv_results <- run.k.fold.cv(sat = sat, k_fold=k_fold, run_param_cv = T,
-#                             dataXY_df = dataXY0, by = by, y_var = y_var,
-#                             index_train = index_train[[1]], index_test = index_test[[1]])
-
 
 #' internal function to get threads to use
 #'
@@ -281,7 +284,7 @@ get.threads <- function(){
 #' @importFrom  xgboost xgboost
 #' @return xgboost model object
 #'
-rfe.fit <- function(X, Y, xgb_param, verbose = FALSE){
+rfe.fit <- function(X, Y, xgb_param){
   if (!is.null(xgb_param$seed)) set.seed(xgb_param$seed) else set.seed(1234)
   xgbmod <- xgboost(data = as.matrix(X),
                     label = as.matrix(Y),
@@ -358,7 +361,7 @@ helper.pack.bins = function(object.sizes, n.bins){
 # Some corresponding functions to generate output -------------------------
 
 #' report R squared
-#' @param data the dataset, modeldt1_wPred from the model above
+#' @param dataXY the dataset, modeldt1_wPred from the model above
 #' @param nround round the results
 #'
 #' @export report.r.squared
@@ -384,10 +387,8 @@ report.r.squared <- function(dataXY, nround = 2){
 #' updated on (19.04.06). only one line is plotted.
 #' @param rmse_rfe use rferesults$rmse_rfe
 #' @return ggplot2 object
-#' @export plot.rmse.summary.simple
-plot.rmse.summary.simple <- function(rmse_rfe = rferesults$rmse_rfe){
-  require(ggplot2)
-  require(plotly)
+#' @export rfe.rmse.plot
+rfe.rmse.plot <- function(rmse_rfe = rferesults$rmse_rfe){
   rmse_rfe_dt <- data.table(x = 1:length(rmse_rfe),
                             y = rmse_rfe)
   n_min <- which.min(rmse_rfe)
@@ -398,4 +399,19 @@ plot.rmse.summary.simple <- function(rmse_rfe = rferesults$rmse_rfe){
          y = "Testing rmse from all folds of CV", color = "", group = "") +
     geom_vline(xintercept = n_min, size = 0.3, linetype = 2) +
     theme_bw()
+}
+
+
+
+if(getRversion() >= "2.15.1")  {
+  utils::globalVariables(c(".","oi","bin","size","aeronetdt",
+                           "sat","long","group","group_count",
+                           "bin_stn","y_var","y_var_pred",
+                           "xgb_threads", "rferesults", "x", "y","..yvar",
+                           "n_rounds", "y_pred",
+                           "xgb_param_list_full", "BIAS", "dayint", "stn",
+                           "..features0", "..y_var",
+                           "xgboost.dart.cvtune",
+                           "..features_updated_Y", "xgboost.dart.cvtune"
+  ))
 }
