@@ -21,6 +21,7 @@
 #' @importFrom stats as.formula cor lm na.omit predict var
 #' @import xgboost
 #' @import data.table
+#' @import here
 #'
 #'
 #' @param modeldt1 the dataset
@@ -112,8 +113,9 @@ run.k.fold.cv.rfe.wrap <- function(
   # write param list to global environment
   # so in rfe process there is no need to run param search
   xgb_param_list_full <- cv_results$xgb_param_list2
-  e0 <- new.env()
-  assign("xgb_param_list_full", xgb_param_list_full, e0)
+  # save to drive instead of using <<- to send to global. Not recommended in funcs.
+  if (!dir.exists(here("Intermediate"))) dir.create(here("Intermediate"))
+  saveRDS(xgb_param_list_full, here("Intermediate", "xgb_param_list_full.rds"))
   cv_results_full_model <- cv_results
   modeldt1 <-  cbind(modeldt1, cv_results$y_pred_dt)
 
@@ -230,7 +232,7 @@ run.k.fold.cv <- function(sat, k_fold, run_param_cv, dataXY_df, y_var,
                                                  predcontrib = TRUE, approxcontrib = FALSE))
     } else {
       # use already obtained param to fit the model (old way)
-      xgb_param_list_full <- get("xgb_param_list_full", envir = e0)
+      xgb_param_list_full <- readRDS(here("Intermediate", "xgb_param_list_full.rds"))
       xgb_param_dart <- xgb_param_list_full[[paste0(by, i)]]
       train_mm <- as.matrix(data_X[index_train[[i]],])
       test_mm <- as.matrix(data_X[index_test[[i]],]) # features do not contain Y variable
@@ -373,11 +375,11 @@ report.r.squared <- function(dataXY, nround = 2){
   rmse_pcnt <- rmse / sqrt(mean((dataXY[[y_var]])^2))
   print(paste('N =', dataXY[,.N],', RMSE reduced from',
               round(sqrt(mean((dataXY[[y_var]])^2)),4),
-      'to', round(rmse,4), "(", round(rmse_pcnt*100, nround), "%),\n",
-      'Traditional R2=', round(R2*100,nround),'%; '))
+              'to', round(rmse,4), "(", round(rmse_pcnt*100, nround), "%),\n",
+              'Traditional R2=', round(R2*100,nround),'%; '))
   print(paste('Pearson R2 between y_var_pred and y_var is',
-      round(cor(dataXY[[y_var]], dataXY[[y_var_pred]])^2*100, nround),
-      '%\n'))
+              round(cor(dataXY[[y_var]], dataXY[[y_var_pred]])^2*100, nround),
+              '%\n'))
   print(paste("Pearson r = ",round(cor(dataXY[[y_var]], dataXY[[y_var_pred]]),
                                    nround+2), '\n'))
 }
@@ -415,3 +417,6 @@ if(getRversion() >= "2.15.1")  {
                            "..features_updated_Y", "xgboost.dart.cvtune"
   ))
 }
+
+
+
